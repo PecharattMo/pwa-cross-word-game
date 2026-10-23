@@ -38,8 +38,8 @@ export type SubmissionResult = {
 
 const TIME_LIMITS: Record<Difficulty, number> = {
   easy: 60,
-  medium: 90,
-  hard: 120,
+  medium: 120,
+  hard: 180,
 };
 
 export function timeLimitSeconds(difficulty: Difficulty) {

@@ -30,8 +30,8 @@ const level: Level = {
 describe("timeLimitSeconds", () => {
   it("uses the agreed timer for every difficulty", () => {
     expect(timeLimitSeconds("easy")).toBe(60);
-    expect(timeLimitSeconds("medium")).toBe(90);
-    expect(timeLimitSeconds("hard")).toBe(120);
+    expect(timeLimitSeconds("medium")).toBe(120);
+    expect(timeLimitSeconds("hard")).toBe(180);
   });
 });
 

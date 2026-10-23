@@ -72,10 +72,10 @@ const difficultyMeta: Array<{
   {
     id: "medium",
     label: "Medium",
-    time: "1:30",
+    time: "2:00",
     description: "คำยาวขึ้นและชวนสับสน",
   },
-  { id: "hard", label: "Hard", time: "2:00", description: "คำท้าทายสำหรับนักเดินทาง" },
+  { id: "hard", label: "Hard", time: "3:00", description: "คำท้าทายสำหรับนักเดินทาง" },
 ];
 
 function formatTime(seconds: number) {
