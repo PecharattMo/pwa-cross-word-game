@@ -5,12 +5,14 @@ import {
   Backspace,
   Bed,
   Binoculars,
+  BookOpenText,
+  CaretRight,
   ChartBar,
   Check,
   ForkKnife,
   Trophy,
 } from "@phosphor-icons/react";
-import { getLevel } from "./data/levels";
+import { getLevel, getVocabularyWord } from "./data/levels";
 import { createCrosswordLayout } from "./game/crossword";
 import {
   activeWord,
@@ -27,13 +29,20 @@ import {
   addSolvedWords,
   completeLevel,
   createProgress,
+  knownWordsForCategory,
   loadProgress,
   saveProgress,
   scoresFor,
   type PlayerProgress,
 } from "./game/progress";
 
-type Screen = "onboarding" | "categories" | "difficulty" | "game" | "scores";
+type Screen =
+  | "onboarding"
+  | "categories"
+  | "difficulty"
+  | "game"
+  | "scores"
+  | "score-details";
 
 const categoryMeta: Array<{
   id: CategoryId;
@@ -114,11 +123,12 @@ export default function App() {
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [showAnswers, setShowAnswers] = useState(false);
+  const [scrambleRound, setScrambleRound] = useState(0);
 
   const currentWord = game ? activeWord(game) : null;
   const letterBank = useMemo(
     () => (currentWord ? scrambledLetters(currentWord.word) : []),
-    [currentWord],
+    [currentWord?.id, scrambleRound],
   );
   const answer = selectedLetters.map((index) => letterBank[index]).join("");
   const crossword = useMemo(
@@ -166,6 +176,7 @@ export default function App() {
     setSelectedLetters([]);
     setFeedback("");
     setShowAnswers(false);
+    setScrambleRound((current) => current + 1);
     setScreen("game");
   }
 
@@ -199,6 +210,7 @@ export default function App() {
     setSelectedLetters([]);
     setFeedback("");
     setShowAnswers(false);
+    setScrambleRound((current) => current + 1);
   }
 
   if (!progress || screen === "onboarding") {
@@ -253,7 +265,16 @@ export default function App() {
           </div>
           <div className="score-list">
             {categoryMeta.map((category) => (
-              <article className="score-row" key={category.id}>
+              <button
+                className="score-row"
+                type="button"
+                key={category.id}
+                onClick={() => {
+                  setSelectedCategory(category.id);
+                  setScreen("score-details");
+                }}
+                aria-label={`ดูคำศัพท์ที่ได้คะแนนในหมวด ${category.label}`}
+              >
                 <span className={`category-mark ${category.id}`}>
                   <CategoryIcon id={category.id} />
                 </span>
@@ -261,8 +282,11 @@ export default function App() {
                   <strong>{category.label}</strong>
                   <small>{category.thai}</small>
                 </div>
-                <b>{scores[category.id]}</b>
-              </article>
+                <span className="score-row-value">
+                  <b>{scores[category.id]}</b>
+                  <CaretRight size={18} weight="bold" aria-hidden="true" />
+                </span>
+              </button>
             ))}
           </div>
           {scores.total > 0 && (
@@ -273,6 +297,61 @@ export default function App() {
           <button className="primary-button" type="button" onClick={() => setScreen("categories")}>
             เล่นต่อ
           </button>
+        </section>
+      </main>
+    );
+  }
+
+  if (screen === "score-details") {
+    const category = categoryMeta.find((item) => item.id === selectedCategory)!;
+    const earnedWords = knownWordsForCategory(progress, selectedCategory)
+      .map((known) =>
+        getVocabularyWord(known.id) ?? {
+          id: known.id,
+          word: known.id,
+          thai: "",
+          definition: "Meaning is not available for this word yet.",
+        },
+      )
+      .sort((left, right) => left.word.localeCompare(right.word, "en"));
+
+    return (
+      <main className="app-shell dashboard-shell">
+        <AppHeader progress={progress} onScores={() => setScreen("categories")} />
+        <section className="panel score-detail-panel">
+          <button className="text-button" type="button" onClick={() => setScreen("scores")}>
+            <ArrowLeft size={18} weight="bold" aria-hidden="true" /> กลับไปหน้าคะแนน
+          </button>
+          <div className="score-detail-heading">
+            <span className={`category-mark ${category.id}`}>
+              <CategoryIcon id={category.id} />
+            </span>
+            <div>
+              <p className="eyebrow">Words with points</p>
+              <h2>{category.label}</h2>
+              <p>{earnedWords.length} คำที่ตอบถูกและได้รับคะแนนแล้ว</p>
+            </div>
+          </div>
+
+          {earnedWords.length > 0 ? (
+            <div className="earned-word-list">
+              {earnedWords.map((word) => (
+                <article className="earned-word-card" key={word.id}>
+                  <BookOpenText size={24} weight="duotone" aria-hidden="true" />
+                  <div>
+                    <h3>{word.word}</h3>
+                    <p>{word.definition}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="empty-score-state">
+              <BookOpenText size={42} weight="duotone" aria-hidden="true" />
+              <strong>ยังไม่มีคำศัพท์ในหมวดนี้</strong>
+              <p>เล่นด่านและตอบคำให้ถูก แล้วคำที่ได้คะแนนจะมาอยู่ที่นี่</p>
+            </div>
+          )}
         </section>
       </main>
     );

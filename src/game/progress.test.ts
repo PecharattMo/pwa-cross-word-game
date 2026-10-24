@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { addSolvedWords, createProgress, scoresFor } from "./progress";
+import {
+  addSolvedWords,
+  createProgress,
+  knownWordsForCategory,
+  scoresFor,
+} from "./progress";
 
 describe("player progress", () => {
   it("awards a word only the first time it is solved", () => {
@@ -25,6 +30,19 @@ describe("player progress", () => {
       attractions: 0,
       total: 3,
     });
+  });
+
+  it("returns the unique scored words for the selected category", () => {
+    const progress = addSolvedWords(
+      addSolvedWords(createProgress("Mook"), "food", ["menu", "meal"]),
+      "travel",
+      ["train"],
+    );
+
+    expect(knownWordsForCategory(progress, "food")).toEqual([
+      { id: "menu", category: "food" },
+      { id: "meal", category: "food" },
+    ]);
   });
 });
 

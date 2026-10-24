@@ -302,6 +302,14 @@ export const vocabularyCount = new Set(
   allLevels.flatMap((level) => level.words.map((word) => word.id)),
 ).size;
 
+const vocabularyById = new Map(
+  allLevels.flatMap((level) => level.words.map((word) => [word.id, word] as const)),
+);
+
+export function getVocabularyWord(wordId: string) {
+  return vocabularyById.get(wordId.toLocaleLowerCase("en-US")) ?? null;
+}
+
 export function getLevel(
   category: CategoryId,
   difficulty: Difficulty,

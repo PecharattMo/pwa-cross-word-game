@@ -61,6 +61,13 @@ export function scoresFor(progress: PlayerProgress): ScoreSummary {
   return summary;
 }
 
+export function knownWordsForCategory(
+  progress: PlayerProgress,
+  category: CategoryId,
+) {
+  return progress.knownWords.filter((known) => known.category === category);
+}
+
 export function saveProgress(progress: PlayerProgress) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }

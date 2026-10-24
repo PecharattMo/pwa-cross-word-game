@@ -400,13 +400,23 @@ h2 {
 }
 
 .score-row {
+  width: 100%;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 12px;
+  border: 2px solid transparent;
   padding: 12px;
   border-radius: 18px;
+  text-align: left;
+  color: var(--ink);
   background: #f6faf8;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.score-row:hover {
+  border-color: var(--sky);
+  transform: translateY(-2px);
 }
 
 .score-row div {
@@ -420,6 +430,83 @@ h2 {
 
 .score-row b {
   font-size: 1.35rem;
+}
+
+.score-row-value {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #2482cc;
+}
+
+.score-detail-panel {
+  align-self: center;
+}
+
+.score-detail-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.score-detail-heading .category-mark {
+  flex: 0 0 auto;
+}
+
+.score-detail-heading .eyebrow {
+  margin-bottom: 3px;
+}
+
+.score-detail-heading p:last-child {
+  margin: 7px 0 0;
+  color: #66837c;
+}
+
+.earned-word-list {
+  display: grid;
+  gap: 10px;
+}
+
+.earned-word-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #d8eafa;
+  border-radius: 18px;
+  color: #176eb7;
+  background: #f8fbfe;
+}
+
+.earned-word-card h3 {
+  margin: 0 0 4px;
+  color: var(--ink);
+  font-size: 1.05rem;
+  text-transform: capitalize;
+}
+
+.earned-word-card p {
+  margin: 0;
+  color: #66837c;
+  line-height: 1.5;
+}
+
+.empty-score-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 34px 20px;
+  border-radius: 22px;
+  text-align: center;
+  color: #2482cc;
+  background: #edf7ff;
+}
+
+.empty-score-state p {
+  max-width: 360px;
+  margin: 0;
+  color: #66837c;
 }
 
 .strength-note {

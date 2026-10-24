@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { allLevels, getLevel, vocabularyCount } from "./levels";
+import {
+  allLevels,
+  getLevel,
+  getVocabularyWord,
+  vocabularyCount,
+} from "./levels";
 
 describe("vocabulary library", () => {
   it("ships more than one thousand unique practical terms", () => {
@@ -27,5 +32,12 @@ describe("vocabulary library", () => {
     const next = getLevel("food", "easy", [first.id]);
 
     expect(next.id).not.toBe(first.id);
+  });
+
+  it("looks up the English meaning for a scored word", () => {
+    expect(getVocabularyWord("menu")).toMatchObject({
+      word: "menu",
+      definition: "a list of food and drinks you can order",
+    });
   });
 });

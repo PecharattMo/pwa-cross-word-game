@@ -18,8 +18,8 @@ export default defineConfig({
         scope: "/pwa-cross-word-game/",
         display: "standalone",
         orientation: "portrait-primary",
-        background_color: "#dff5ef",
-        theme_color: "#176b5b",
+        background_color: "#dceeff",
+        theme_color: "#2588dc",
         icons: [
           {
             src: "icon-192.png",
