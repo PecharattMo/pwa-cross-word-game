@@ -152,6 +152,13 @@ export default function App() {
     return () => window.clearInterval(timer);
   }, [game?.expiresAt, game?.status]);
 
+  useEffect(() => {
+    if (feedback !== "ถูกต้อง!") return;
+
+    const clearFeedback = window.setTimeout(() => setFeedback(""), 900);
+    return () => window.clearTimeout(clearFeedback);
+  }, [feedback]);
+
   function updateProgress(next: PlayerProgress) {
     setProgress(next);
     saveProgress(next);
@@ -494,7 +501,10 @@ export default function App() {
                   className="letter-button"
                   key={`${letter}-${index}`}
                   disabled={selectedLetters.includes(index)}
-                  onClick={() => setSelectedLetters((current) => [...current, index])}
+                  onClick={() => {
+                    setFeedback("");
+                    setSelectedLetters((current) => [...current, index]);
+                  }}
                   style={
                     {
                       "--letter-index": index,
