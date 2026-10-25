@@ -470,7 +470,8 @@ h2 {
 
 .earned-word-card {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
   gap: 12px;
   padding: 15px;
   border: 1px solid #d8eafa;
@@ -490,6 +491,27 @@ h2 {
   margin: 0;
   color: #66837c;
   line-height: 1.5;
+}
+
+.pronunciation-button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #b8dafa;
+  border-radius: 50%;
+  color: #176eb7;
+  background: #e9f5ff;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.pronunciation-button:hover {
+  transform: translateY(-1px);
+  background: #dceeff;
+}
+
+.pronunciation-button:active {
+  transform: scale(0.96);
 }
 
 .empty-score-state {

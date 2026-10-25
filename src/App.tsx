@@ -10,8 +10,10 @@ import {
   ChartBar,
   Check,
   ForkKnife,
+  SpeakerHigh,
   Trophy,
 } from "@phosphor-icons/react";
+import { speakEnglishWord } from "./audio/pronunciation";
 import { getLevel, getVocabularyWord } from "./data/levels";
 import { createCrosswordLayout } from "./game/crossword";
 import {
@@ -198,6 +200,7 @@ export default function App() {
     }
 
     if (result.kind === "correct" || result.kind === "complete") {
+      speakEnglishWord(currentWord.word);
       let nextProgress = addSolvedWords(progress, game.level.category, [currentWord.id]);
       if (result.kind === "complete") {
         nextProgress = completeLevel(nextProgress, game.level.id);
@@ -349,6 +352,15 @@ export default function App() {
                     <h3>{word.word}</h3>
                     <p>{word.definition}</p>
                   </div>
+                  <button
+                    className="pronunciation-button"
+                    type="button"
+                    onClick={() => speakEnglishWord(word.word)}
+                    aria-label={`ฟังการออกเสียงคำว่า ${word.word}`}
+                    title={`ฟัง ${word.word}`}
+                  >
+                    <SpeakerHigh size={22} weight="fill" aria-hidden="true" />
+                  </button>
                 </article>
               ))}
             </div>
